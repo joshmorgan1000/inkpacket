@@ -1,0 +1,2 @@
+/usr/bin/ar qc libinkpacket.a CMakeFiles/inkpacket.dir/src/ink_packet_builder.cpp.o CMakeFiles/inkpacket.dir/src/ink_packet_loader.cpp.o CMakeFiles/inkpacket.dir/src/ink_packet_patcher.cpp.o CMakeFiles/inkpacket.dir/src/ink_packet_verify.cpp.o CMakeFiles/inkpacket.dir/src/ink_packet_memory.cpp.o CMakeFiles/inkpacket.dir/src/platform/macos.cpp.o
+/usr/bin/ranlib libinkpacket.a

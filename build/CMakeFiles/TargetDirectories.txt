@@ -1,0 +1,5 @@
+/Users/joshmorgan/projects/encryption/psyfer/inkpacket/build/CMakeFiles/inkpacket.dir
+/Users/joshmorgan/projects/encryption/psyfer/inkpacket/build/CMakeFiles/ink-pack.dir
+/Users/joshmorgan/projects/encryption/psyfer/inkpacket/build/CMakeFiles/ink-patch.dir
+/Users/joshmorgan/projects/encryption/psyfer/inkpacket/build/CMakeFiles/edit_cache.dir
+/Users/joshmorgan/projects/encryption/psyfer/inkpacket/build/CMakeFiles/rebuild_cache.dir

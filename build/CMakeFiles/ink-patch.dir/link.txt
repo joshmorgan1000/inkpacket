@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names "CMakeFiles/ink-patch.dir/src/ink_patch.cpp.o" -o ink-patch  libinkpacket.a -lpsyfer -ldl
