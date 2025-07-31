@@ -57,7 +57,7 @@ public:
     }
     
 private:
-    bool build_shared_library(const fs::path& temp_dir, const fs::path& output,
+    bool build_shared_library(const fs::path& /*temp_dir*/, const fs::path& output,
                               std::string& log, std::string& error) {
         std::stringstream cmd;
         cmd << config.compiler << " " << config.cxx_flags;
@@ -288,7 +288,7 @@ void __ink_packet_init() {
     std::vector<uint8_t> calculate_hash(const std::vector<uint8_t>& data) {
         if (config.hash_algo == 0) { // SHA-256
             std::array<std::byte, 32> hash;
-            psyfer::hash::sha256::hash(
+            psyfer::sha256_hasher::hash(
                 std::span<const std::byte>(reinterpret_cast<const std::byte*>(data.data()), data.size()),
                 hash
             );
@@ -298,7 +298,7 @@ void __ink_packet_init() {
             );
         } else if (config.hash_algo == 1) { // SHA-512
             std::array<std::byte, 64> hash;
-            psyfer::hash::sha512::hash(
+            psyfer::sha512_hasher::hash(
                 std::span<const std::byte>(reinterpret_cast<const std::byte*>(data.data()), data.size()),
                 hash
             );
@@ -318,7 +318,7 @@ void __ink_packet_init() {
         const char* info = "ink_packet_encryption";
         std::array<std::byte, 32> salt{}; // Empty salt
         
-        auto kdf_err = psyfer::kdf::hkdf::derive_sha256(
+        auto kdf_err = psyfer::hkdf::derive_sha256(
             std::span<const std::byte>(reinterpret_cast<const std::byte*>(hash.data()), hash.size()),
             salt,
             std::span<const std::byte>(reinterpret_cast<const std::byte*>(info), strlen(info)),
@@ -344,7 +344,7 @@ void __ink_packet_init() {
         
         // Generate random IV
         std::array<std::byte, IV_LEN> iv;
-        auto iv_err = psyfer::utils::secure_random::generate(iv);
+        auto iv_err = psyfer::secure_random::generate(iv);
         if (iv_err) {
             return {};  // Failed to generate IV
         }
@@ -365,7 +365,7 @@ void __ink_packet_init() {
         );
         
         // Encrypt data
-        psyfer::crypto::aes256_gcm cipher;
+        psyfer::aes256_gcm cipher;
         std::array<std::byte, TAG_LEN> tag;
         
         auto encrypt_err = cipher.encrypt(
@@ -399,7 +399,7 @@ void __ink_packet_init() {
         
         // Generate random nonce
         std::array<std::byte, NONCE_LEN> nonce;
-        auto nonce_err = psyfer::utils::secure_random::generate(nonce);
+        auto nonce_err = psyfer::secure_random::generate(nonce);
         if (nonce_err) {
             return {};  // Failed to generate nonce
         }
@@ -420,7 +420,7 @@ void __ink_packet_init() {
         );
         
         // Encrypt data
-        psyfer::crypto::chacha20_poly1305 cipher;
+        psyfer::chacha20_poly1305 cipher;
         std::array<std::byte, TAG_LEN> tag;
         
         auto encrypt_err = cipher.encrypt(

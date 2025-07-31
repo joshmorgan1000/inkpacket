@@ -106,21 +106,23 @@ echo
 echo "▶️  Running protected binary:"
 ./demo_protected "Hello World" || true
 
-# Simulate tampering
+# Simulate tampering - modify the appended data instead of the binary code
 echo
 echo "🔧 Simulating tampering..."
-echo "   Modifying one byte at offset 1000..."
+echo "   Modifying encrypted payload..."
 # Create tampered copy
 cp demo_protected demo_tampered
-# Modify a byte
-printf '\xFF' | dd of=demo_tampered bs=1 seek=1000 count=1 conv=notrunc 2>/dev/null
+# Modify last byte of the file (in the payload area)
+TAMPER_OFFSET=$((PROTECTED_SIZE - 5))
+printf '\x00' | dd of=demo_tampered bs=1 seek=$TAMPER_OFFSET count=1 conv=notrunc 2>/dev/null
 
 echo "   Original hash: $(shasum -a 256 demo_protected | cut -d' ' -f1 | cut -c1-16)..."
 echo "   Tampered hash: $(shasum -a 256 demo_tampered | cut -d' ' -f1 | cut -c1-16)..."
 
 echo
-echo "▶️  Running tampered binary (should fail in real implementation):"
-./demo_tampered "Hello World" 2>&1 || echo "   ❌ Would fail with: Decryption error - integrity check failed"
+echo "▶️  Running tampered binary (still runs, but would fail decryption):"
+./demo_tampered "Hello World" 2>&1 || true
+echo "   ❌ In real implementation: Decryption error - integrity check failed"
 
 # Explain the protection
 echo

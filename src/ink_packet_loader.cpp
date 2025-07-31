@@ -153,7 +153,7 @@ private:
     std::vector<uint8_t> calculate_hash(const std::vector<uint8_t>& data, uint8_t algo) {
         if (algo == 0) { // SHA-256
             std::array<std::byte, 32> hash;
-            psyfer::hash::sha256::hash(
+            psyfer::sha256_hasher::hash(
                 std::span<const std::byte>(reinterpret_cast<const std::byte*>(data.data()), data.size()),
                 hash
             );
@@ -163,7 +163,7 @@ private:
             );
         } else if (algo == 1) { // SHA-512
             std::array<std::byte, 64> hash;
-            psyfer::hash::sha512::hash(
+            psyfer::sha512_hasher::hash(
                 std::span<const std::byte>(reinterpret_cast<const std::byte*>(data.data()), data.size()),
                 hash
             );
@@ -184,7 +184,7 @@ private:
         const char* info = "ink_packet_encryption";
         std::array<std::byte, 32> salt{}; // Empty salt
         
-        auto kdf_err = psyfer::kdf::hkdf::derive_sha256(
+        auto kdf_err = psyfer::hkdf::derive_sha256(
             std::span<const std::byte>(reinterpret_cast<const std::byte*>(hash.data()), hash.size()),
             salt,
             std::span<const std::byte>(reinterpret_cast<const std::byte*>(info), strlen(info)),
@@ -231,7 +231,7 @@ private:
         );
         
         // Decrypt
-        psyfer::crypto::aes256_gcm cipher;
+        psyfer::aes256_gcm cipher;
         auto decrypt_err = cipher.decrypt(
             decrypt_data,
             key,
@@ -275,7 +275,7 @@ private:
         );
         
         // Decrypt
-        psyfer::crypto::chacha20_poly1305 cipher;
+        psyfer::chacha20_poly1305 cipher;
         auto decrypt_err = cipher.decrypt(
             decrypt_data,
             key,

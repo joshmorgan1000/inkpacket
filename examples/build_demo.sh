@@ -31,7 +31,7 @@ echo
 
 # 5. Protect the binary
 echo "🔐 Step 5: Protecting the binary..."
-./example_patcher protected_app secret_lib.so
+../ink-patch --binary protected_app --payload secret_lib.so --key "demo-key"
 echo
 
 # 6. Show new size
@@ -48,8 +48,11 @@ echo
 echo "💥 Step 8: Demonstrating tamper detection:"
 echo "   Creating tampered version..."
 cp protected_app protected_app_tampered
-# Change one byte
-echo -n "X" | dd of=protected_app_tampered bs=1 seek=1000 count=1 conv=notrunc 2>/dev/null
+# Get file size
+TAMPER_SIZE=$(stat -f%z protected_app_tampered 2>/dev/null || stat -c%s protected_app_tampered)
+# Modify near the end (in payload area)
+TAMPER_OFFSET=$((TAMPER_SIZE - 100))
+echo -n "X" | dd of=protected_app_tampered bs=1 seek=$TAMPER_OFFSET count=1 conv=notrunc 2>/dev/null
 echo "   Running tampered version (should fail):"
 ./protected_app_tampered || echo "   ✅ Tamper detection works!"
 echo

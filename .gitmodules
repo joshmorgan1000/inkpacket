@@ -1,0 +1,3 @@
+[submodule "dependencies/psyfer"]
+	path = dependencies/psyfer
+	url = https://github.com/joshmorgan1000/psyfer.git

@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Add psyfer subdirectory
+add_subdirectory(dependencies/psyfer)
+
 # InkPacket library
 add_library(inkpacket STATIC
     src/ink_packet_builder.cpp
@@ -49,9 +52,30 @@ target_link_libraries(ink-pack PRIVATE inkpacket)
 add_executable(ink-patch src/ink_patch.cpp)
 target_link_libraries(ink-patch PRIVATE inkpacket)
 
+# Examples
+option(BUILD_EXAMPLES "Build examples" ON)
+if(BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
 # Tests
 if(BUILD_TESTING)
     add_executable(test_inkpacket tests/test_inkpacket.cpp)
     target_link_libraries(test_inkpacket PRIVATE inkpacket)
     add_test(NAME inkpacket_test COMMAND test_inkpacket)
 endif()
+
+# ──────────────────────────────────────────────────────────────
+# Print configuration summary
+# ──────────────────────────────────────────────────────────────
+message(STATUS "  __       __                     __          __   ")
+message(STATUS " |__.-----|  |--.-----.---.-.----|  |--.-----|  |_ ")
+message(STATUS " |  |     |    <|  _  |  _  |  __|    <|  -__|   _|")
+message(STATUS " |__|__|__|__|__|   __|___._|____|__|__|_____|____|")
+message(STATUS "                |__|                               ")
+message(STATUS "─────────────────────────────────────────────────────")
+message(STATUS "  Binary protection application configured")
+message(STATUS "    Version: ${PROJECT_VERSION}")
+message(STATUS "    CMake Version: ${CMAKE_VERSION}")
+message(STATUS "    C++ Standard: ${CMAKE_CXX_STANDARD}")
+message(STATUS "────────────────────────────────────────────────")

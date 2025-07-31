@@ -86,7 +86,7 @@ std::vector<uint8_t> hash_self(uint8_t algo) {
         // Calculate hash
         if (algo == 0) { // SHA-256
             std::array<std::byte, 32> hash;
-            psyfer::hash::sha256::hash(
+            psyfer::sha256_hasher::hash(
                 std::span<const std::byte>(reinterpret_cast<const std::byte*>(data.data()), data.size()),
                 hash
             );
@@ -96,7 +96,7 @@ std::vector<uint8_t> hash_self(uint8_t algo) {
             );
         } else if (algo == 1) { // SHA-512
             std::array<std::byte, 64> hash;
-            psyfer::hash::sha512::hash(
+            psyfer::sha512_hasher::hash(
                 std::span<const std::byte>(reinterpret_cast<const std::byte*>(data.data()), data.size()),
                 hash
             );
