@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="inkpacket_logo.png" alt="Psyne Logo" width="150"/>
+  <img src="inkpacket_logo.png" alt="Psyne Logo" width="250"/>
 
 A sophisticated binary protection system that creates self-decrypting executables with anti-tampering capabilities.
 </div>
